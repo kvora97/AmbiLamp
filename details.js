@@ -5,30 +5,26 @@ var tempChart;
 var tempCounter = 0;
 var soundcounter = 0;
 
-function drawTemp() 
-{
+
+function drawTemp() {
         tempCounter++;
         tempCtx = document.getElementById("temp-chart-long").getContext('2d');
 
-        if ((tempCounter = tempCounter % 2) == 0)
-        {
+        if ((tempCounter = tempCounter % 2) == 0){
             tempChart.destroy();
         }
 
-        else
-		{ 
+        else{ 
+
             tempChart = new Chart(tempCtx, 
         {
             type: 'bar',
-            data: 
-			{
+            data: {
                 labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-                datasets: 
-				[{
+                datasets: [{
                     label: '# of Votes',
                     data: [12, 19, 3, 5, 2, 3],
-                    backgroundColor: 
-					[
+                    backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
                         'rgba(54, 162, 235, 0.2)',
                         'rgba(255, 206, 86, 0.2)',
@@ -36,8 +32,7 @@ function drawTemp()
                         'rgba(153, 102, 255, 0.2)',
                         'rgba(255, 159, 64, 0.2)'
                     ],
-                    borderColor: 
-					[
+                    borderColor: [
                         'rgba(255,99,132,1)',
                         'rgba(54, 162, 235, 1)',
                         'rgba(255, 206, 86, 1)',
@@ -48,15 +43,10 @@ function drawTemp()
                     borderWidth: 1
                 }]
             },
-            
-            options: 
-			{
-                scales: 
-				{
-                    yAxes: 
-					[{
-                        ticks: 
-						{
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
                             beginAtZero:true
                         }
                     }]
@@ -67,32 +57,24 @@ function drawTemp()
     }
 }
 
-
-function drawSound() 
-{
+function drawSound() {
     soundcounter++;
 
-    if ((soundcounter = soundcounter % 2) == 0) 
-	{
+    if ((soundcounter = soundcounter % 2) == 0) {
         soundChart.destroy();
     }
 
-    else 
-	{
+    else {
 
         soundCtx = document.getElementById("sound-chart-long").getContext('2d');
-        soundChart = new Chart(soundCtx, 
-		{
+        soundChart = new Chart(soundCtx, {
             type: 'bar',
-            data: 
-			{
+            data: {
                 labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-                datasets: 
-				[{
+                datasets: [{
                     label: '# of Votes',
                     data: [12, 19, 3, 5, 2, 3],
-                    backgroundColor: 
-					[
+                    backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
                         'rgba(54, 162, 235, 0.2)',
                         'rgba(255, 206, 86, 0.2)',
@@ -100,8 +82,7 @@ function drawSound()
                         'rgba(153, 102, 255, 0.2)',
                         'rgba(255, 159, 64, 0.2)'
                     ],
-                    borderColor: 
-					[
+                    borderColor: [
                         'rgba(255,99,132,1)',
                         'rgba(54, 162, 235, 1)',
                         'rgba(255, 206, 86, 1)',
@@ -112,14 +93,10 @@ function drawSound()
                     borderWidth: 1
                 }]
             },
-            options: 
-			{
-                scales: 
-				{
-                    yAxes: 
-					[{
-                        ticks: 
-						{
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
                             beginAtZero:true
                         }
                     }]
