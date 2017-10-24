@@ -37,6 +37,7 @@ var tempChart = new Chart(tempCtx, {
     }
 });
 
+
 var soundCtx = document.getElementById("sound-chart").getContext('2d');
 var soundChart = new Chart(soundCtx, {
     type: 'bar',
