@@ -2,7 +2,7 @@
 <html>
 <head>
 	<title>AmbiLamp</title>
-	<link rel="stylesheet" type="text/css" href="details.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/details.css">
 </head>
 <body>
 
@@ -16,7 +16,7 @@
 <input type="button" id="sound-bin" class="btn" value="View Sound Charts" onclick="drawSound()">
 <canvas id="sound-chart-long" class="chart" width="900" height="350" hidden></canvas>
 
-<script type="text/javascript" src="details.js"></script>
+<script type="text/javascript" src="assets/js/details.js"></script>
 
 <!-- TABLES -->
 

@@ -2,23 +2,29 @@
 <html>
 <head>
   <title>AmbiLamp</title>
-  <link rel="stylesheet" type="text/css" href="index.css">
+  <link rel="stylesheet" type="text/css" href="assets/css/index.css">
 <!--  <link rel="stylesheet" type="text/css" href="header.css"> -->
-<!--  <script src="jscolor.js"></script> -->
+<script src="jscolor.js"></script>
 <body>
 
 <?php
-  include "header.php"
+  include "GPIO.php";
+  include "header.php";
+  $color = "EFFFC9";
+  if (isset($_POST['set_color'])) {
+    $color = $_POST['color'];
+  }
+
 ?>
 
 <!-- JS COLOR PICKER -->
-<input type="button" class="jscolor" id="picker" value="EFFFC9">
+<input type="button" class="jscolor" id="picker" onchange="update(this.jscolor)" onfocusout="apply()" value=<?php echo "'" . $color . "'"; ?> >
 
 <!-- FORM -->
-<form>
-	<input type="text" name="" id="color" >
+<form method="POST">
+  <input type="text" name="color" id="color" >
+	<input type="submit" id="smt" name="set_color"  hidden>
 	<input type="submit" name="Set as Default" id="set_default" >
-
 </form>
 
 <!-- CHARTS -->
@@ -55,7 +61,7 @@
 
 </div>
 
-<script type="text/javascript" src="index.js"></script>
+<script type="text/javascript" src="assets/js/index.js"></script>
 
 
 </body>
