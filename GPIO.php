@@ -65,7 +65,7 @@
 
     public function pwm_write($_value) {
       if ($_value > -1 && $_value < 256) {
-        return exec( "echo " . $this->_pwm_number . "=" . $_value . " > /dev/servoblaster");
+        return exec( "echo " . $this->_pwm_number . "=" . (255-$_value) . " > /dev/servoblaster");
       }
     }
 	}
