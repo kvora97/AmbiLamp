@@ -23,11 +23,26 @@ import sys
 import time
 import Adafruit_DHT
 
+import pymongo
+from datetime import datetime
+from pytz import timezone
+
+
+############ VARIABLES ################
+
 duration = 5 # 5 second
 sensorDHT = 22
 pinDHT    = 26
 
 
+
+#############  CONNECT TO MONGODB AND GRAB COLLECTIONS ##############
+
+connection = pymongo.MongoClient("mongodb://AmbiLamp:admin@ds044689.mlab.com:44689/ambilamp")
+db = connection.ambilamp
+sounds = db.sound
+humidities = db.hum
+temperatures = db.temp
 
 # Parse command line parameters.
 #sensor_args = { '11': Adafruit_DHT.DHT11,
@@ -48,16 +63,28 @@ humidity, temperature = Adafruit_DHT.read_retry(sensorDHT, pinDHT)
 # Un-comment the line below to convert the temperature to Fahrenheit.
 temperature = temperature * 9/5.0 + 32
 
+# taking time stamp
+dto = datetime.now(timezone('UTC'))
+
+dto_pacific = dto.astimezone(timezone('US/Pacific'))
+#.localize(dto)
+dts = datetime.strftime(dto_pacific,"%Y-%m-%d %H:%M:%S")
+
 # Note that sometimes you won't get a reading and
 # the results will be null (because Linux can't
 # guarantee the timing of calls to read the sensor).
 # If this happens try again!
 while 1:
   if humidity is not None and temperature is not None:
+    humidity_entry = {'time':dts, 'val':humidity}
+    humidities.insert_one(humidity_entry)
+    temperature_entry = {'time':dts, 'val':temperature}
+    temperatures.insert_one(temperature_entry)
     print('Temp={0:0.1f}*  Humidity={1:0.1f}%'.format(temperature, humidity))
     #print('Temp={0:0.1f}* Humidity={1:0.1f}%'.format(temperature,humidity))
     time.sleep(duration) # sleep till its time for next reading
     humidity, temperature = Adafruit_DHT.read_retry(sensorDHT, pinDHT)
+
 #else
-#    print('Failed to get reading. Try again!')
-#    sys.exit(1)
+#   print('Failed to get reading. Try again!')
+#   sys.exit(1)
