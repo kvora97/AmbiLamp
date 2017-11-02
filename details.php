@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,6 +10,39 @@
 
 <?php
   include "header.php";
+
+  /* Connect to MongoDB */
+  $db = connectMongo();
+  $sounds = $db->sound;
+  $temperatures = $db->temp;
+  $soundCursor = $sounds->find()->sort(array('entry' => -1))->limit(24);
+  $temperatureCursor = $temperatures->find()->sort(array('entry' => -1))->limit(24);
+
+  /* Parse temperature data */
+  /* We need to form a strinf representation of two 
+  /* arrays, which will become x-y pairs for a line chart
+  /* This is because Charts.js will need an array, which we
+  /* we will probably provide by assigning this string to JS
+  /* variable. It will make more sense in a minute */
+
+  $temperatureX = "[";
+  $temperatureData = "[";
+
+  foreach ($temperatureCursor as $doc) {
+
+    $time = split('[ ]', $doc['time']);
+    $temperatureX = $temperatureX, "'" . $time[1] . "',";
+    $temperatureData = $temperatureData . $doc['val'] . ",";
+  }
+
+  $temperatureX = trim($temperatureX, ",");
+  $temperatureX = $temperatureX . "]";
+
+  $temperatureData = trim($temperatureData, ",");
+  $temperatureData = $temperatureData . "]";
+
+  /* end of temperature parse */
+  
 ?>
 
 <!-- BUTTONS AND CANVASES -->

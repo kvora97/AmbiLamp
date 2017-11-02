@@ -1,3 +1,15 @@
+<?php
+
+  function connectMongo() {
+    $connection = new MongoClient("mongodb://AmbiLamp:admin@ds044689.mlab.com:44689/ambilamp");
+    $db = $cconnectoin->ambilamp;
+    return $db;
+  
+  }
+
+
+?>
+
 <link rel="stylesheet" type="text/css" href="assets/css/header.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.min.js"></script>
   <script src="assets/js/jscolor.js"></script>
