@@ -21,7 +21,11 @@
 # SOFTWARE.
 import sys
 import time
+
 import Adafruit_DHT
+from SoundSensor import SoundSensor
+from MCP3008ADC import MCP3008ADC
+import RPi.GPIO as GPIO
 
 import pymongo
 from datetime import datetime
@@ -30,11 +34,22 @@ from pytz import timezone
 
 ############ VARIABLES ################
 
-duration = 5 # 5 second
+duration = 3600 # interval between 2 readings
+
+# DHT Pins
 sensorDHT = 22
 pinDHT    = 26
 
+# Sound Sensor pins and declarations
+pinGate = 21
+pinEnvelope = 1
+pinAudio = 0
 
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(pinGate, GPIO.IN)
+
+myMCP = MCP3008ADC()
+mySoundSensor = SoundSensor(pinGate, pinEnvelope, pinAudio)
 
 #############  CONNECT TO MONGODB AND GRAB COLLECTIONS ##############
 
@@ -58,6 +73,10 @@ temperatures = db.temp
 
 # Try to grab a sensor reading.  Use the read_retry method which will retry up
 # to 15 times to get a sensor reading (waiting 2 seconds between each retry).
+
+########## SOUND SENSOR ##################
+
+
 humidity, temperature = Adafruit_DHT.read_retry(sensorDHT, pinDHT)
 
 # Un-comment the line below to convert the temperature to Fahrenheit.
@@ -70,17 +89,29 @@ dto_pacific = dto.astimezone(timezone('US/Pacific'))
 #.localize(dto)
 dts = datetime.strftime(dto_pacific,"%Y-%m-%d %H:%M:%S")
 
+
+num_entries = sounds.count()
+
 # Note that sometimes you won't get a reading and
 # the results will be null (because Linux can't
 # guarantee the timing of calls to read the sensor).
 # If this happens try again!
 while 1:
+  gateVal = GPIO.input(mySoundSensor.get_gate())
+  envelopeVal = myMCP.read(mySoundSensor.get_envelope())
+  audioVal = myMCP.read(mySoundSensor.get_audio())
+  
   if humidity is not None and temperature is not None:
-    humidity_entry = {'time':dts, 'val':humidity}
+    num_entries = num_entries + 1
+    humidity_entry = {'entry':num_entries, 'time':dts, 'val':humidity}
     humidities.insert_one(humidity_entry)
-    temperature_entry = {'time':dts, 'val':temperature}
+    temperature_entry = {'entry':num_entries, 'time':dts, 'val':temperature}
     temperatures.insert_one(temperature_entry)
-    print('Temp={0:0.1f}*  Humidity={1:0.1f}%'.format(temperature, humidity))
+    sound_entry = {'entry':num_entries, 'time':dts, 'gate': gateVal, 'envelope':envelopeVal, 'audio':audioVal}
+    sounds.insert_one(sound_entry)
+#    print('Temp={0:0.1f}*  Humidity={1:0.1f}% '.format(temperature, humidity))
+
+ #   print "NUM ENTRY:", num_entries, "DTS:", dts, "GATE:", gateVal, "ENVELOPE:", envelopeVal, "AUDIO:", audioVal 
     #print('Temp={0:0.1f}* Humidity={1:0.1f}%'.format(temperature,humidity))
     time.sleep(duration) # sleep till its time for next reading
     humidity, temperature = Adafruit_DHT.read_retry(sensorDHT, pinDHT)
