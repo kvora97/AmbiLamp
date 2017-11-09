@@ -34,7 +34,7 @@ from pytz import timezone
 
 ############ VARIABLES ################
 
-duration = 3600 # interval between 2 readings
+duration = 2 # interval between 2 readings
 
 # DHT Pins
 sensorDHT = 22
