@@ -2,7 +2,7 @@
 
   function connectMongo() {
     $connection = new MongoClient("mongodb://AmbiLamp:admin@ds044689.mlab.com:44689/ambilamp");
-    $db = $cconnectoin->ambilamp;
+    $db = $connection->ambilamp;
     return $db;
   
   }

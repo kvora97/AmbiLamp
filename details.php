@@ -34,21 +34,47 @@
     $temperatureData = $temperatureData . $doc['val'] . ",";
   }
 
-  /*
+ 
   $temperatureX = trim($temperatureX, ",");
   $temperatureX = $temperatureX . "]";
 
   $temperatureData = trim($temperatureData, ",");
   $temperatureData = $temperatureData . "]";
-*/
+
   /* end of temperature parse */
 
-  /* assign arrays to JS variables */
-  /*echo "<script>";
+/* assign arrays to JS variables */
+  echo "<script>";
   echo "var temperatureData = " . $temperatureData . ";";
   echo "var temperatureX = " . $temperatureX . ";";
   echo "</script>";
-*/
+
+  $soundX = "[";
+  $soundData = "[";
+
+  foreach ($soundCursor as $doc) {
+
+    $time = split('[ ]', $doc['time']);
+    $soundX = $soundX . "'" . $time[1] . "',";
+    $soundData = $soundData . $doc['val'] . ",";
+  }
+
+  
+  $soundX = trim($soundX, ",");
+  $soundX = $soundX . "]";
+
+  $soundData = trim($soundData, ",");
+  $soundData = $soundData . "]";
+
+  /* end of temperature parse */
+
+/* assign arrays to JS variables */
+  echo "<script>";
+  echo "var soundData = " . $soundData . ";";
+  echo "var soundX = " . $soundX . ";";
+  echo "</script>";
+
+
 
 ?>
 
@@ -60,56 +86,7 @@
 
 <script type="text/javascript" src="assets/js/details.js"></script>
 
-<!-- TABLES -->
-<div id="tables-container">
-  <div class="table">
-    <table id="temp-table">
-      <tr>
-        <th>Time</th>
-        <th>Temperature</th>
-      </tr>
-    
-      <?php
-
-      foreach ($temperatureCursor as $doc) 
-      {
-        echo "<tr>";
-          echo "<td>".$doc['time']."</td>";
-          echo "<td>".$doc['val']."</td>";
-        echo "</tr>";
-      }
-
-      ?>
-    </table>
-  </div>
-</div>
-
-
-<div id="tables-container">
-  <div class="table">
-    <table id="sound-table">
-      <tr>
-        <th>Time</th>
-        <th>Sound</th>
-      </tr>
-    
-      <?php
-
-      foreach ($soundCursor as $doc) 
-      {
-        echo "<tr>";
-          echo "<td>".$doc['time']."</td>";
-          echo "<td>".$doc['val']."</td>";
-        echo "</tr>";
-      }
-
-      ?>
-    </table>
-  </div>
-</div>
-
-
-<!--
+<!--->
 
 <div id="tables-container">
 
@@ -199,8 +176,7 @@
 </div>
 
 
--->
+<!-->
 
 </body>
-</html>
-
+</html

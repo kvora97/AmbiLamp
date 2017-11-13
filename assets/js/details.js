@@ -13,17 +13,14 @@ function drawTemp() {
         if ((tempCounter = tempCounter % 2) == 0){
             tempChart.destroy();
         }
-
-        else{ 
-
-            tempChart = new Chart(tempCtx, 
-        {
-            type: 'bar',
+        else { 
+            tempChart = new Chart(tempCtx, {
+            type: 'line',
             data: {
-                labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+                labels: temperatureX,
                 datasets: [{
-                    label: '# of Votes',
-                    data: [12, 19, 3, 5, 2, 3],
+                    label: 'Temperature Readings',
+                    data: temperatureData,
                     backgroundColor: [
                         'rgba(153, 102, 255, 0.2)',
                     ],
@@ -49,21 +46,20 @@ function drawTemp() {
 
 function drawSound() {
     soundcounter++;
-
+    soundCtx = document.getElementById("sound-chart-long").getContext('2d');
     if ((soundcounter = soundcounter % 2) == 0) {
         soundChart.destroy();
     }
 
     else {
 
-        soundCtx = document.getElementById("sound-chart-long").getContext('2d');
         soundChart = new Chart(soundCtx, {
-            type: 'bar',
+            type: 'line',
             data: {
-                labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+                labels: soundX,
                 datasets: [{
-                    label: '# of Votes',
-                    data: [12, 19, 3, 5, 2, 3],
+                    label: 'Sound Readings',
+                    data: soundData,
                     backgroundColor: [
                         'rgba(153, 102, 255, 0.2)',
                     ],
