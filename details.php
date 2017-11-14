@@ -56,7 +56,7 @@
 
     $time = split('[ ]', $doc['time']);
     $soundX = $soundX . "'" . $time[1] . "',";
-    $soundData = $soundData . $doc['val'] . ",";
+    $soundData = $soundData . $doc['audio'] . ",";
   }
 
   
@@ -86,97 +86,50 @@
 
 <script type="text/javascript" src="assets/js/details.js"></script>
 
-<!--->
-
 <div id="tables-container">
-
 	<div class="table">
 		<table id="temp-table" >
-			<ul>
-			<tr class="topcell">
-			    <th>Company</th>
-			    <th>Contact</th>
-			    <th>Country</th>
-			  </tr>
-			  <tr>
-			    <td>Alfreds Futterkiste</td>
-			    <td>Maria Anders</td>
-			    <td>Germany</td>
-			  </tr>
-			  <tr>
-			    <td>Centro comercial Moctezuma</td>
-			    <td>Francisco Chang</td>
-			    <td>Mexico</td>
-			  </tr>
-			  <tr>
-			    <td>Ernst Handel</td>
-			    <td>Roland Mendel</td>
-			    <td>Austria</td>
-			  </tr>
-			  <tr>
-			    <td>Island Trading</td>
-			    <td>Helen Bennett</td>
-			    <td>UK</td>
-			  </tr>
-			  <tr>
-			    <td>Laughing Bacchus Winecellars</td>
-			    <td>Yoshi Tannamuri</td>
-			    <td>Canada</td>
-			  </tr>
-			  <tr>
-			    <td>Magazzini Alimentari Riuniti</td>
-			    <td>Giovanni Rovelli</td>
-			    <td>Italy</td>
-			  </tr>
-			</ul>
-		</table>
+      <tr>
+        <th>Time</th>
+        <th>Temperature</th>
+      </tr>
+
+      <?php
+
+        foreach ($temperatureCursor as $doc) {
+          echo "<tr>";
+            echo "<td>".$doc['time']."</td>";
+            echo "<td>".$doc['val']."</td>";
+          echo "</tr>";
+        }
+
+      ?>
+
+    </table>
 	</div>
 
 	<div class="table">
 		<table id="sound-table" >
-		<ul>
-			<tr class="topcell">
-			    <th>Company</th>
-			    <th>Contact</th>
-			    <th>Country</th>
-			  </tr>
-			  <tr>
-			    <td>Alfreds Futterkiste</td>
-			    <td>Maria Anders</td>
-			    <td>Germany</td>
-			  </tr>
-			  <tr>
-			    <td>Centro comercial Moctezuma</td>
-			    <td>Francisco Chang</td>
-			    <td>Mexico</td>
-			  </tr>
-			  <tr>
-			    <td>Ernst Handel</td>
-			    <td>Roland Mendel</td>
-			    <td>Austria</td>
-			  </tr>
-			  <tr>
-			    <td>Island Trading</td>
-			    <td>Helen Bennett</td>
-			    <td>UK</td>
-			  </tr>
-			  <tr>
-			    <td>Laughing Bacchus Winecellars</td>
-			    <td>Yoshi Tannamuri</td>
-			    <td>Canada</td>
-			  </tr>
-			  <tr>
-			    <td>Magazzini Alimentari Riuniti</td>
-			    <td>Giovanni Rovelli</td>
-			    <td>Italy</td>
-			  </tr>
-		</ul>
-		</table>
+	      <tr>
+        <th>Time</th>
+        <th>Sound</th>
+      </tr>
+
+      <?php
+
+        foreach ($soundCursor as $doc) {
+          echo "<tr>";
+            echo "<td>".$doc['time']."</td>";
+            echo "<td>".$doc['audio']."</td>";
+          echo "</tr>";
+        }
+
+      ?>
+
+    </table>
 	</div>
 </div>
 
-
-<!-->
 
 </body>
 </html
