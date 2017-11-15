@@ -72,7 +72,8 @@
   $blue->pwm_write(hexdec($colorArray[4].$colorArray[5]));
   /* END LED CODE */
 
-  /* BEGIN SOUND AND DATA PARSING */
+  
+  /* BEGIN SOUND DATA PARSING */
 
   // pre-fill arrays with 0
   $hourSums = array_fill(0, 24, 0);
@@ -120,10 +121,96 @@
     }
   }
 
+//  echo $soundDataDay;
+ 
+  $soundDataDay = trim($soundDataDay, ",");
+  $soundDataDay = $soundDataDay . "]";
+ 
+  $soundDataNight = trim($soundDataNight, ",");
+  $soundDataNight = $soundDataNight . "]";
 
+  $soundMin = trim($soundMin, ",");
+  $soundMin = $soundMin . "]";
+
+  $soundMax = trim($soundMax, ",");
+  $soundMax = $soundMax . "]";
+
+  echo "<script>";
+  echo "var soundDataDay = " . $soundDataDay . ";";
+  echo "var soundDataNight = " . $soundDataNight . ";";
+  echo "var soundMin = " . $soundMin . ";";
+  echo "var soundMax = " . $soundMax . ";";
+  echo "</script>";
+
+
+// }   <---   NOT SURE IF THIS BRACKET NEEDS TO BE HERE ????
+  
+  /* BEGIN TEMP DATA PARSING */
+
+  // pre-fill arrays with 0
+  $hourtempSums = array_fill(0, 24, 0);
+  $hourtempCounts = array_fill(0, 24, 0);
+
+  // create sums for the readings from each hour, and 
+  // the number of readings for that hour
+  foreach ($tempCursor as $doc) {
+
+    $time = split('[-:]', $doc['time'])[3];
+    
+    $hourtempCounts[$time] = $hourtempCounts[$time] + 1;
+    $hourtempSums[$time] = $hourtempSums[$time] + $doc['temp'];
 
   }
 
+  // parse these arrays to create arrays of averages by hour
+  $tempMin = 1000;
+  $tempMax = 0;
+  $tempDataDay = '[';
+  $tempDataNight = '[';
+
+  for($i = 0; $i < 24; $i = $i + 1) {
+
+    //calculate the average
+    $hourtempSums[$i] = $hourtempSums[$i]/$hourtempCounts[$i];
+
+    // update the max value
+    if ((float)$hourtempSums[$i] > $tempMax) {
+      $tempMax = (float)$tempSums[$i];
+    }
+
+    // update the min value
+    if ((float)$hourtempSums[$i] < $tempMax) {
+      $tempMin = (float)$hourtempSums[$i];
+    }
+
+    // determine whether to add the value to daytime array 
+    // or to the night time array
+    if ($i < 12) {
+      $tempDataDay = $tempDataDay . (float)$hourtempSums[$i] . ",";
+    }
+    else {
+      $tempDataNight = $tempDataNight . (float)$hourtempSums[$i] . ",";
+    }
+  }
+
+  $tempDataDay = trim($tempDataDay, ",");
+  $tempDataDay = $tempDataDay . "]";
+ 
+  $tempDataNight = trim($tempDataNight, ",");
+  $tempDataNight = $tempDataNight . "]";
+
+  $tempMin = trim($tempMin, ",");
+  $tempMin = $tempMin . "]";
+
+  $tempMax = trim($tempMax, ",");
+  $tempMax = $tempMax . "]";
+
+  echo "<script>";
+  echo "var tempDataDay = " . $tempDataDay . ";";
+  echo "var tempDataNight = " . $tempDataNight . ";";
+  echo "var tempMin = " . $tempMin . ";";
+  echo "var tempMax = " . $tempMax . ";";
+  echo "</script>";
 
 ?>
 
