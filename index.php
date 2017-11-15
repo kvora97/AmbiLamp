@@ -72,6 +72,59 @@
   $blue->pwm_write(hexdec($colorArray[4].$colorArray[5]));
   /* END LED CODE */
 
+  /* BEGIN SOUND AND DATA PARSING */
+
+  // pre-fill arrays with 0
+  $hourSums = array_fill(0, 24, 0);
+  $hourCounts = array_fill(0, 24, 0);
+
+  // create sums for the readings from each hour, and 
+  // the number of readings for that hour
+  foreach ($soundCursor as $doc) {
+
+    $time = split('[-:]', $doc['time'])[3];
+    
+    $hourCounts[$time] = $hourCounts[$time] + 1;
+    $hourSums[$time] = $hourSums[$time] + $doc['audio'];
+
+  }
+
+  // parse these arrays to create arrays of averages by hour
+  $soundMin = 1000;
+  $soundMax = 0;
+  $soundDataDay = '[';
+  $soundDataNight = '[';
+
+  for($i = 0; $i < 24; $i = $i + 1) {
+
+    //calculate the average
+    $hourSums[$i] = $hourSums[$i]/$hourCounts[$i];
+
+    // update the max value
+    if ((float)$hourSums[$i] > $soundMax) {
+      $soundMax = (float)$hourSums[$i];
+    }
+
+    // update the min value
+    if ((float)$hourSums[$i] < $soundMax) {
+      $soundMin = (float)$hourSums[$i];
+    }
+
+    // determine whether to add the value to daytime array 
+    // or to the night time array
+    if ($i < 12) {
+      $soundDataDay = $soundDataDay . (float)$hourSums[$i] . ",";
+    }
+    else {
+      $soundDataNight = $soundDataNight . (float)$hourSums[$i] . ",";
+    }
+  }
+
+
+
+  }
+
+
 ?>
 
 <!-- JS COLOR PICKER -->
