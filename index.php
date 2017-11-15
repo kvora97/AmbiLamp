@@ -79,6 +79,9 @@
   $hourSums = array_fill(0, 24, 0);
   $hourCounts = array_fill(0, 24, 0);
 
+  $sound_data = $db->sound;
+  $soundCursor = $sound_data->find()->sort(array('entry' => -1))->limit(24);
+  
   // create sums for the readings from each hour, and 
   // the number of readings for that hour
   foreach ($soundCursor as $doc) {
@@ -89,6 +92,7 @@
     $hourSums[$time] = $hourSums[$time] + $doc['audio'];
 
   }
+  
 
   // parse these arrays to create arrays of averages by hour
   $soundMin = 1000;
@@ -107,7 +111,7 @@
     }
 
     // update the min value
-    if ((float)$hourSums[$i] < $soundMax) {
+    if ((float)$hourSums[$i] < $soundMin) {
       $soundMin = (float)$hourSums[$i];
     }
 
@@ -121,7 +125,6 @@
     }
   }
 
-//  echo $soundDataDay;
  
   $soundDataDay = trim($soundDataDay, ",");
   $soundDataDay = $soundDataDay . "]";
@@ -129,11 +132,11 @@
   $soundDataNight = trim($soundDataNight, ",");
   $soundDataNight = $soundDataNight . "]";
 
-  $soundMin = trim($soundMin, ",");
-  $soundMin = $soundMin . "]";
+//  $soundMin = trim($soundMin, ",");
+//  $soundMin = $soundMin . "]";
 
-  $soundMax = trim($soundMax, ",");
-  $soundMax = $soundMax . "]";
+//  $soundMax = trim($soundMax, ",");
+//  $soundMax = $soundMax . "]";
 
   echo "<script>";
   echo "var soundDataDay = " . $soundDataDay . ";";
@@ -141,6 +144,7 @@
   echo "var soundMin = " . $soundMin . ";";
   echo "var soundMax = " . $soundMax . ";";
   echo "</script>";
+
 
 
 // }   <---   NOT SURE IF THIS BRACKET NEEDS TO BE HERE ????
@@ -151,6 +155,10 @@
   $hourtempSums = array_fill(0, 24, 0);
   $hourtempCounts = array_fill(0, 24, 0);
 
+  $temp_data = $db->temp;
+  $tempCursor = $temp_data->find()->sort(array('entry' => -1))->limit(24);
+  //$tempCursor = $temp_data->find();
+ 
   // create sums for the readings from each hour, and 
   // the number of readings for that hour
   foreach ($tempCursor as $doc) {
@@ -158,8 +166,7 @@
     $time = split('[-:]', $doc['time'])[3];
     
     $hourtempCounts[$time] = $hourtempCounts[$time] + 1;
-    $hourtempSums[$time] = $hourtempSums[$time] + $doc['temp'];
-
+    $hourtempSums[$time] = $hourtempSums[$time] + $doc['val'];
   }
 
   // parse these arrays to create arrays of averages by hour
@@ -175,11 +182,11 @@
 
     // update the max value
     if ((float)$hourtempSums[$i] > $tempMax) {
-      $tempMax = (float)$tempSums[$i];
+      $tempMax = (float)$hourtempSums[$i];
     }
 
     // update the min value
-    if ((float)$hourtempSums[$i] < $tempMax) {
+    if ((float)$hourtempSums[$i] < $tempMin) {
       $tempMin = (float)$hourtempSums[$i];
     }
 
@@ -199,11 +206,12 @@
   $tempDataNight = trim($tempDataNight, ",");
   $tempDataNight = $tempDataNight . "]";
 
-  $tempMin = trim($tempMin, ",");
-  $tempMin = $tempMin . "]";
+//  $tempMin = trim($tempMin, ",");
+//  $tempMin = $tempMin . "]";
 
-  $tempMax = trim($tempMax, ",");
-  $tempMax = $tempMax . "]";
+//  $tempMax = trim($tempMax, ",");
+//  $tempMax = $tempMax . "]";
+
 
   echo "<script>";
   echo "var tempDataDay = " . $tempDataDay . ";";
@@ -212,6 +220,10 @@
   echo "var tempMax = " . $tempMax . ";";
   echo "</script>";
 
+  echo $tempDataDay;
+  echo $tempDataNight;
+  echo $tempMin . ",";
+  echo $tempMax;
 ?>
 
 <!-- JS COLOR PICKER -->
