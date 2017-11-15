@@ -11,14 +11,36 @@
   
   include "GPIO.php";
   include "header.php";
-  $color = "EFFFC9";
+
+  $default_color = "EFFFC9";
+
+  $db = connectMongo();
+
+  $color_data = $db->color;
+
+//  $color = "EFFFC9";
+
+  if (isset($_POST['set_default'])) {
+
+    $num_entries = $color_data->count();
+    $color_dict = array('color' => $_POST['color'], 'entry' => $num_entries +1);
+    $color_data->insert($color_dict);  
+  }
+
+  $colorCursor = $color_data->find()->sort(array('entry' => -1))->limit(1);
+
+  foreach($colorCursor as $doc) {
+    $color = $doc['color']; 
+    // change the initialized default color to the one specified in the database
+  }
+
   if (isset($_POST['set_color'])) {
     $color = $_POST['color'];
   }
 
-  if (isset($_POST['set_default'])) {
+  /*if (isset($_POST['set_default'])) {
     $color_data->insert($_POST['color']);
-  }
+  }*/
 
   /* BEGIN LED CODE */
   /********************************************************
@@ -59,7 +81,7 @@
 <form method="POST">
   <input type="text" name="color" id="color" >
 	<input type="submit" id="smt" name="set_color"  hidden>
-	<input type="submit" name="Set as Default" id="set_default" >
+	<input type="submit" value="Set as Default" id="set_default" name="set_default" >
 </form>
 
 <!-- CHARTS -->
